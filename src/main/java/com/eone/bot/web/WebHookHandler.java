@@ -1,6 +1,6 @@
 package com.eone.bot.web;
 
-import com.eone.bot.update.UpdateProcessor;
+import com.eone.bot.messages.UpdateProcessor;
 import com.pengrad.telegrambot.BotUtils;
 import com.pengrad.telegrambot.model.Update;
 import org.eclipse.jetty.server.Request;
