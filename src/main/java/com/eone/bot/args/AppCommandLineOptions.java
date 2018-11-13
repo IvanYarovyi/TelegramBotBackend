@@ -34,7 +34,7 @@ public class AppCommandLineOptions {
         opt2.setRequired(false);
         options.addOption(opt2);
 
-        Option opt3 = new Option("h", OPTION.WEB_HOOK.toString(), true, "Webhook url for Telegram (public IP)");
+        Option opt3 = new Option("i", OPTION.PUBLIC_IP.toString(), true, "Your public IP");
         opt3.setRequired(false);
         options.addOption(opt3);
 
@@ -43,7 +43,7 @@ public class AppCommandLineOptions {
         options.addOption(opt4);
     }
 
-    public String getOption(OPTION option) throws Exception {
+    public String getOption(OPTION option) {
         return cmd.getOptionValue(option.toString());
     }
 

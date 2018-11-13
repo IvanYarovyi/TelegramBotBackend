@@ -18,11 +18,11 @@ public class Main {
         AppCommandLineOptions appCommandLineOptions = new AppCommandLineOptions(args);
         String token = appCommandLineOptions.getOption(OPTION.TOKEN);
         String portStr = appCommandLineOptions.getOption(OPTION.SERVER_PORT);
-        String webHook = appCommandLineOptions.getOption(OPTION.PUBLIC_IP);
+        String publicIp = appCommandLineOptions.getOption(OPTION.PUBLIC_IP);
         String certPath = appCommandLineOptions.getOption(OPTION.CERTIFICATE);
 
         TelegramBot telegramBot = new TelegramBot(token);
-        TelegramUtils.setupWebHook(webHook, certPath, telegramBot);
+        TelegramUtils.setupWebHook(publicIp, certPath, telegramBot);
 
         int port = JettyWebServerStarter.getWebServerPort(portStr);
         JettyWebServerStarter.start(port, telegramBot);

@@ -10,18 +10,20 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
+import static com.eone.bot.web.JettyWebServerStarter.WEB_HOOK_PATH;
+
 public class TelegramUtils {
 
     private static final Logger LOG = LogManager.getLogger(TelegramUtils.class);
 
-    public static void setupWebHook(String webHook, String certPath, TelegramBot telegramBot) {
-        if (webHook != null & certPath != null) {
+    public static void setupWebHook(String publicIp, String certPath, TelegramBot telegramBot) {
+        if (publicIp != null & certPath != null) {
             File certificateFile = new File(certPath);
             if (!certificateFile.canRead()) {
                 LOG.warn("Can't read certificate :" + certPath);
             }
             SetWebhook request = new SetWebhook()
-                    .url(webHook)
+                    .url(publicIp + WEB_HOOK_PATH)
                     .certificate(certificateFile);
             BaseResponse setWebHookResponse = telegramBot.execute(request);
             LOG.info("Set WebHook Response :" + setWebHookResponse);

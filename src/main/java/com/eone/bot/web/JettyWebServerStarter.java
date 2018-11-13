@@ -10,6 +10,7 @@ import org.eclipse.jetty.server.handler.ContextHandler;
 
 public class JettyWebServerStarter {
     private static final Logger LOG = LogManager.getLogger(JettyWebServerStarter.class);
+    public static final String WEB_HOOK_PATH = "/webHook";
 
     public static int getWebServerPort(String portStr) {
         int port = 8080;
@@ -27,7 +28,7 @@ public class JettyWebServerStarter {
         Server server = new Server(port);
 
         ContextHandler context = new ContextHandler();
-        context.setContextPath("/webHook");
+        context.setContextPath(WEB_HOOK_PATH);
         context.setResourceBase(".");
         context.setClassLoader(Thread.currentThread().getContextClassLoader());
         server.setHandler(context);
