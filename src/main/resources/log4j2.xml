@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss} %-5level %logger{36}  %m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="ALL">
+            <AppenderRef ref="STDOUT"/>
+        </Root>
+    </Loggers>
+</Configuration>
+<!--<Configuration>-->
+    <!--<Appenders>-->
+        <!--<File name="FileAppender" fileName="proper2.log" immediateFlush="false" append="true">-->
+            <!--<PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>-->
+        <!--</File>-->
+    <!--</Appenders>-->
+    <!--<Loggers>-->
+        <!--<Root level="INFO">-->
+            <!--<AppenderRef ref="FileAppender"/>-->
+        <!--</Root>-->
+    <!--</Loggers>-->
+<!--</Configuration>-->

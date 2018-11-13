@@ -3,10 +3,13 @@ package com.eone.bot.web;
 import com.eone.bot.messages.HelloProcessor;
 import com.eone.bot.web.WebHookHandler;
 import com.pengrad.telegrambot.TelegramBot;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 
 public class JettyWebServerStarter {
+    private static final Logger LOG = LogManager.getLogger(JettyWebServerStarter.class);
 
     public static int getWebServerPort(String portStr) {
         int port = 8080;
@@ -14,7 +17,7 @@ public class JettyWebServerStarter {
             try {
                 port = Integer.parseInt(portStr);
             } catch (Exception e) {
-                System.out.println("Could not parse port: " + port);
+                LOG.warn("Could not parse port: " + port);
             }
         }
         return port;

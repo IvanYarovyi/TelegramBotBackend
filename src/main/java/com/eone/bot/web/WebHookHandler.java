@@ -3,6 +3,8 @@ package com.eone.bot.web;
 import com.eone.bot.messages.UpdateProcessor;
 import com.pengrad.telegrambot.BotUtils;
 import com.pengrad.telegrambot.model.Update;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
@@ -14,6 +16,8 @@ import java.util.stream.Collectors;
 
 public class WebHookHandler extends AbstractHandler {
 
+    private static final Logger LOG = LogManager.getLogger(WebHookHandler.class);
+
     private UpdateProcessor updateProcessor;
 
     public WebHookHandler(UpdateProcessor updateProcessor) {
@@ -21,17 +25,17 @@ public class WebHookHandler extends AbstractHandler {
     }
 
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
+            throws IOException {
 
         String body = request.getReader()
                 .lines()
                 .collect(Collectors.joining(System.lineSeparator()));
-        System.out.println("Request BODY: \n" + body);
+        LOG.debug("Request BODY: \n" + body);
         try {
             Update update = BotUtils.parseUpdate(body);
             updateProcessor.processUpdate(update);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            LOG.warn(e.getMessage());
             return;
         }
 
