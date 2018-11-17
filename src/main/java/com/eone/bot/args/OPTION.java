@@ -4,7 +4,8 @@ public enum OPTION {
     TOKEN("token"),
     CERTIFICATE("certificate"),
     PUBLIC_IP("public_ip"),
-    SERVER_PORT("port");
+    SERVER_PORT("port"),
+    LOG_PATH("log_path");
 
     private final String val;
 

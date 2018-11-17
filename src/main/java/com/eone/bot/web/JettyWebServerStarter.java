@@ -1,7 +1,6 @@
 package com.eone.bot.web;
 
-import com.eone.bot.messages.HelloProcessor;
-import com.eone.bot.web.WebHookHandler;
+import com.eone.bot.updates.HelloProcessor;
 import com.pengrad.telegrambot.TelegramBot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

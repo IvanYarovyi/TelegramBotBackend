@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration>
+<Configuration status="warn" name="MyApp" packages="">
     <Appenders>
-        <Console name="STDOUT" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss} %-5level %logger{36}  %m%n"/>
-        </Console>
+        <!--
+                immediateFlush="true"
+        -->
+        <RollingFile
+                name="rollingFile"
+                fileName="./bot_log/application.log"
+                filePattern="./bot_log/application.%d{dd-MMM}.log.gz"
+                ignoreExceptions="false"
+                append="true"
+        >
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <!--<OnStartupTriggeringPolicy/>-->
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="5"/>
+        </RollingFile>
     </Appenders>
     <Loggers>
-        <Root level="ALL">
-            <AppenderRef ref="STDOUT"/>
+        <Root level="debug">
+            <AppenderRef ref="rollingFile"/>
         </Root>
     </Loggers>
 </Configuration>
-<!--<Configuration>-->
-    <!--<Appenders>-->
-        <!--<File name="FileAppender" fileName="proper2.log" immediateFlush="false" append="true">-->
-            <!--<PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>-->
-        <!--</File>-->
-    <!--</Appenders>-->
-    <!--<Loggers>-->
-        <!--<Root level="INFO">-->
-            <!--<AppenderRef ref="FileAppender"/>-->
-        <!--</Root>-->
-    <!--</Loggers>-->
-<!--</Configuration>-->

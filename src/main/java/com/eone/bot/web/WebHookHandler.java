@@ -1,6 +1,6 @@
 package com.eone.bot.web;
 
-import com.eone.bot.messages.UpdateProcessor;
+import com.eone.bot.updates.UpdateProcessor;
 import com.pengrad.telegrambot.BotUtils;
 import com.pengrad.telegrambot.model.Update;
 import org.apache.logging.log4j.LogManager;
@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
