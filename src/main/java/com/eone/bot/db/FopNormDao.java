@@ -1,6 +1,5 @@
 package com.eone.bot.db;
 
-import com.eone.bot.model.Fop;
 import com.eone.bot.model.FopNorm;
 
 import java.sql.*;
@@ -11,7 +10,6 @@ public class FopNormDao {
 
     private Connection connection;
     private PreparedStatement psGet;
-    private PreparedStatement psCount;
 
     public FopNormDao(String dbUrl) throws SQLException {
         this.connection = DriverManager.getConnection(dbUrl);
@@ -21,23 +19,6 @@ public class FopNormDao {
                         " from fop2_norm " +
                         "where last_name = ? and first_name = ? and other_name = ?"
         );
-        this.psCount = connection.prepareStatement(
-                "select count(*) " +
-                        " from fop2_norm " +
-                        //"where fop2.full_name like UPPER(?)"
-                        "where last_name = ? and first_name = ? and other_name = ?"
-        );
-    }
-
-    public int getCount(String last, String first, String other) throws SQLException {
-        psCount.setString(1, last);
-        psCount.setString(2, first);
-        psCount.setString(3, other);
-        ResultSet resultSet = psCount.executeQuery();
-        while (resultSet.next()) {
-            return resultSet.getInt(1);
-        }
-       return 0;
     }
 
     public List<FopNorm> getFops(String last, String first, String other) throws SQLException {

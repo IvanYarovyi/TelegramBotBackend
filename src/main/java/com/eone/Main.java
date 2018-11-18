@@ -1,9 +1,7 @@
 package com.eone;
 
 import com.eone.bot.TelegramUtils;
-import com.eone.bot.db.FopDao;
 import com.eone.bot.db.FopNormDao;
-import com.eone.bot.model.FopNorm;
 import com.eone.bot.updates.FopRequestProcessor;
 import com.eone.bot.web.JettyWebServerStarter;
 import com.eone.bot.args.AppCommandLineOptions;
