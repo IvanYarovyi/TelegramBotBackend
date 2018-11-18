@@ -2,6 +2,7 @@ package com.eone.bot.args;
 
 public enum OPTION {
     TOKEN("token"),
+    DB_URL("db_url"),
     CERTIFICATE("certificate"),
     PUBLIC_IP("public_ip"),
     SERVER_PORT("port"),

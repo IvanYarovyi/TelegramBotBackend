@@ -1,6 +1,10 @@
 package com.eone;
 
 import com.eone.bot.TelegramUtils;
+import com.eone.bot.db.FopDao;
+import com.eone.bot.db.FopNormDao;
+import com.eone.bot.model.FopNorm;
+import com.eone.bot.updates.FopRequestProcessor;
 import com.eone.bot.web.JettyWebServerStarter;
 import com.eone.bot.args.AppCommandLineOptions;
 import com.eone.bot.args.OPTION;
@@ -13,16 +17,20 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         LOG.info("Application was started.");
-        AppCommandLineOptions сommandLineOpt = new AppCommandLineOptions(args);
-        String token = сommandLineOpt.getOption(OPTION.TOKEN);
-        String portStr = сommandLineOpt.getOption(OPTION.SERVER_PORT);
-        String publicIp = сommandLineOpt.getOption(OPTION.PUBLIC_IP);
-        String certPath = сommandLineOpt.getOption(OPTION.CERTIFICATE);
+        AppCommandLineOptions commandLineOptions = new AppCommandLineOptions(args);
+        String token = commandLineOptions.getOption(OPTION.TOKEN);
+        String dbUrl = commandLineOptions.getOption(OPTION.DB_URL);
+        String portStr = commandLineOptions.getOption(OPTION.SERVER_PORT);
+        String publicIp = commandLineOptions.getOption(OPTION.PUBLIC_IP);
+        String certPath = commandLineOptions.getOption(OPTION.CERTIFICATE);
+
+
         TelegramBot telegramBot = new TelegramBot(token);
         TelegramUtils.setupWebHook(publicIp, certPath, telegramBot);
 
         int port = JettyWebServerStarter.getWebServerPort(portStr);
-        JettyWebServerStarter.start(port, telegramBot);
+        FopNormDao fopDao = new FopNormDao(dbUrl);
+        JettyWebServerStarter.start(port, telegramBot, new FopRequestProcessor(telegramBot, fopDao));
         //this line executes never
     }
 

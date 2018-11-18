@@ -1,6 +1,6 @@
 package com.eone.bot.web;
 
-import com.eone.bot.updates.HelloProcessor;
+import com.eone.bot.updates.UpdateProcessor;
 import com.pengrad.telegrambot.TelegramBot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +23,7 @@ public class JettyWebServerStarter {
         return port;
     }
 
-    public static void start(int port, TelegramBot telegramBot) throws Exception {
+    public static void start(int port, TelegramBot telegramBot, UpdateProcessor  updateProcessor) throws Exception {
         Server server = new Server(port);
 
         ContextHandler context = new ContextHandler();
@@ -32,7 +32,7 @@ public class JettyWebServerStarter {
         context.setClassLoader(Thread.currentThread().getContextClassLoader());
         server.setHandler(context);
 
-        context.setHandler(new WebHookHandler(new HelloProcessor(telegramBot)));
+        context.setHandler(new WebHookHandler(updateProcessor));
 
         server.start();
         server.join();

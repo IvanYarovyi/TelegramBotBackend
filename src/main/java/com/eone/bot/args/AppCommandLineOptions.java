@@ -16,10 +16,12 @@ public class AppCommandLineOptions {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
             formatter.printHelp(100,
-                    " bot-backend-all.jar OPTIONS...",
-                    "only option -c is mandatory",
+                    "bot-backend-all.jar OPTIONS...",
+                    "Options-c and -d are mandatory",
                     options,
-                    "example: java -jar bot-backend-all.jar -t=123456789:AAA-sssss_D8oXaqBBEoaaaafQhdsddsdql -p=8082");
+                    "example: java -jar bot-backend-all.jar " +
+                            "-t=123456789:AAA-sssss_D8oXaqBBEoaaaafQhdsddsdql -p=8082 " +
+                            "-d=jdbc:mariadb://localhost:3306/fop?user=root&password=root");
 
             System.exit(1);
         }
@@ -41,6 +43,10 @@ public class AppCommandLineOptions {
         Option opt4 = new Option("p", OPTION.SERVER_PORT.toString(), true, "Web server port for this application");
         opt4.setRequired(false);
         options.addOption(opt4);
+
+        Option opt5 = new Option("d", OPTION.DB_URL.toString(), true, "Database connection url");
+        opt5.setRequired(true);
+        options.addOption(opt5);
     }
 
     public String getOption(OPTION option) {
