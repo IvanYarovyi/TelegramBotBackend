@@ -10,17 +10,17 @@ import org.eclipse.jetty.server.handler.ContextHandler;
 public class JettyWebServerStarter {
     private static final Logger LOG = LogManager.getLogger(JettyWebServerStarter.class);
     public static final String WEB_HOOK_PATH = "/webHook";
+    public static final int DEFAULT_PORT = 8080;
 
     public static int getWebServerPort(String portStr) {
-        int port = 8080;
         if (portStr != null) {
             try {
-                port = Integer.parseInt(portStr);
+                return Integer.parseInt(portStr);
             } catch (Exception e) {
-                LOG.warn("Could not parse port: " + port);
+                LOG.warn("Could not parse port: " + portStr);
             }
         }
-        return port;
+        return DEFAULT_PORT;
     }
 
     public static void start(int port, TelegramBot telegramBot, UpdateProcessor  updateProcessor) throws Exception {

@@ -17,7 +17,7 @@ public class FopNormDao {
                 "select " +
                         "last_name, first_name, other_name, address, activity, status" +
                         " from fop2_norm " +
-                        "where last_name = ? and first_name = ? and other_name = ?"
+                        "where last_name like ? and first_name like ? and other_name like ?"
         );
     }
 

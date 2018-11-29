@@ -15,8 +15,6 @@ import java.util.List;
 public class FopRequestProcessor implements UpdateProcessor {
 
     private static final org.apache.logging.log4j.Logger LOG = LogManager.getLogger(FopRequestProcessor.class);
-    public static final int GET_FOPS_LIMIT = 40;
-    public static final int PRINT_FOPS_LIMIT = 5;
 
     private TelegramBot telegramBot;
     private FopNormDao fopDao;
@@ -28,20 +26,19 @@ public class FopRequestProcessor implements UpdateProcessor {
 
     @Override
     public boolean processUpdate(Update update) {
-        String text = update.message().text();
+        String userQuery = update.message().text();
         List<FopNorm> fops = null;
         try {
-            String[] s = convertToFullTextSearch(text);
-
+            String[] s = convertToFullTextSearch(userQuery);
             fops = this.fopDao.getFops(s[0], s[1], s[2]);
-
         } catch (SQLException e) {
             LOG.warn(e.getMessage());
             return false;
         }
+        //todo make fop limit, grouping, count ...
         if (fops.size() == 0) {
             StringBuilder sb = new StringBuilder();
-            sb.append(String.format("За фільтром %s в базі нічого не знайденно.", text));
+            sb.append(String.format("За фільтром %s в базі нічого не знайденно.", userQuery));
             sb.append("\n *Уточніть ваш запит, та спробуйте знову.*");
             SendMessage response
                     = new SendMessage(update.message().chat().id(), sb.toString());
@@ -49,14 +46,11 @@ public class FopRequestProcessor implements UpdateProcessor {
             SendResponse execute = telegramBot.execute(response);
             LOG.trace(execute);
         } else {
-            for (FopNorm fop :
-                    fops) {
-                SendMessage response
-                        = new SendMessage(update.message().chat().id(), formatOutput(fop));
+            for (FopNorm fop : fops) {
+                SendMessage response = new SendMessage(update.message().chat().id(), formatOutput(fop));
                 response.parseMode(ParseMode.Markdown);
                 SendResponse execute = telegramBot.execute(response);
                 LOG.trace(execute);
-
             }
         }
         return true;
@@ -75,13 +69,18 @@ public class FopRequestProcessor implements UpdateProcessor {
 
     }
 
-    private String convertTextToSqlLikeParam(String string) {
-        return "%" + string.replace(" ", "%") + "%";
-    }
-
     private String[] convertToFullTextSearch(String string) {
         String[] split = string.split(" ");
-        return split;
+        String[] param3 = new String[3];
+        param3[0] = "%";
+        param3[1] = "%";
+        param3[2] = "%";
+        if (split.length == 3){
+            param3[0] = split[0]+"%";
+            param3[1] = split[1]+"%";
+            param3[2] = split[2]+"%";
+        }
+        return param3;
     }
 
 }
