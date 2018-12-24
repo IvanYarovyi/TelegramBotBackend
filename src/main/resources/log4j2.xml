@@ -6,7 +6,7 @@
         -->
         <RollingFile
                 name="rollingFile"
-                fileName="./bot_log/application.log"
+                fileName="/tmp/fop-bot-application.log"
                 filePattern="./bot_log/application.%d{dd-MMM}.log.gz"
                 ignoreExceptions="false"
                 append="true"

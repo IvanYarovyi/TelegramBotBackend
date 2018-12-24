@@ -17,8 +17,13 @@ public class Main {
         LOG.info("Application was started.");
         AppCommandLineOptions commandLineOptions = new AppCommandLineOptions(args);
         String token = commandLineOptions.getOption(OPTION.TOKEN);
-        String dbUrl = commandLineOptions.getOption(OPTION.DB_URL);
+
+        String dbUrl = commandLineOptions.getOption(OPTION.DB_HOST);
+        String dbUser = commandLineOptions.getOption(OPTION.DB_USER);
+        String dbPassword = commandLineOptions.getOption(OPTION.DB_PASSWORD);
+
         String portStr = commandLineOptions.getOption(OPTION.SERVER_PORT);
+
         String publicIp = commandLineOptions.getOption(OPTION.PUBLIC_IP);
         String certPath = commandLineOptions.getOption(OPTION.CERTIFICATE);
 
@@ -27,7 +32,7 @@ public class Main {
         TelegramUtils.setupWebHook(publicIp, certPath, telegramBot);
 
         int port = JettyWebServerStarter.getWebServerPort(portStr);
-        FopNormDao fopDao = new FopNormDao(dbUrl);
+        FopNormDao fopDao = new FopNormDao(dbUrl, dbUser, dbPassword);
         JettyWebServerStarter.start(port, telegramBot, new FopRequestProcessor(telegramBot, fopDao));
         //this line executes never
     }
