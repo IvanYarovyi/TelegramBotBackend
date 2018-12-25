@@ -12,6 +12,7 @@ repositories {
 
 //create a single Jar with all dependencies
 task fatJar(type: Jar) {
+    dependsOn("build")
     manifest {
         attributes 'Implementation-Title': '',
                 'Implementation-Version': version,
