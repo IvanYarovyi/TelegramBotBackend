@@ -16,14 +16,14 @@ public class TelegramUtils {
 
     private static final Logger LOG = LogManager.getLogger(TelegramUtils.class);
 
-    public static void setupWebHook(String webHook, String certPath, TelegramBot telegramBot) {
-        if (webHook != null && certPath != null) {
+    public static void setupWebHook(String publicIp, String certPath, TelegramBot telegramBot) {
+        if (publicIp != null && certPath != null) {
             File certificateFile = new File(certPath);
             if (!certificateFile.canRead()) {
                 LOG.warn("Can't read certificate :" + certPath);
             }
             SetWebhook request = new SetWebhook()
-                    .url(webHook + WEB_HOOK_PATH)
+                    .url(publicIp + WEB_HOOK_PATH)
                     .certificate(certificateFile);
             BaseResponse setWebHookResponse = telegramBot.execute(request);
             LOG.info("Set WebHook Response :" + setWebHookResponse);
@@ -32,7 +32,7 @@ public class TelegramUtils {
         }
 
         GetWebhookInfoResponse webHookInfoResponse = telegramBot.execute(new GetWebhookInfo());
-        LOG.info("Check Telegram status. {}", webHookInfoResponse);
+        LOG.info("\n\n Check Telegram status. {} \n\n", webHookInfoResponse);
     }
 
 }

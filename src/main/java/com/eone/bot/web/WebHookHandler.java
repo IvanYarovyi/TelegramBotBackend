@@ -40,7 +40,6 @@ public class WebHookHandler extends AbstractHandler {
             updateProcessor.processUpdate(update);
         } catch (Exception e) {
             LOG.warn(e.getMessage());
-            return;
         }
     }
 

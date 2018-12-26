@@ -16,14 +16,14 @@ public class FopRequestProcessor implements UpdateProcessor {
 
     private static final org.apache.logging.log4j.Logger LOG = LogManager.getLogger(FopRequestProcessor.class);
 
-    //"За запитом: '%s' в базі нічого не знайденно."
-    private static final String MESSAGE_NO_DATA = "\u0417\u0430 \u0437\u0430\u043f\u0438\u0442\u043e\u043c: %s \u0432 \u0431\u0430\u0437\u0456 \u043d\u0456\u0447\u043e\u0433\u043e \u043d\u0435 \u0437\u043d\u0430\u0439\u0434\u0435\u043d\u043d\u043e.";
+    //"За запитом: \"%s\" в базі нічого не знайденно."
+    private static final String MESSAGE_NO_DATA = "\u0417\u0430 \u0437\u0430\u043f\u0438\u0442\u043e\u043c: \"%s\" \u0432 \u0431\u0430\u0437\u0456 \u043d\u0456\u0447\u043e\u0433\u043e \u043d\u0435 \u0437\u043d\u0430\u0439\u0434\u0435\u043d\u043d\u043e.";
     //"Не валідний запит. Спробуйте: _Мельник Іван Іванович_ або _Мельник Іван_ ";
     private static final String MESSAGE_QUERY_EXAMPLE = "\u041d\u0435 \u0432\u0430\u043b\u0456\u0434\u043d\u0438\u0439 \u0437\u0430\u043f\u0438\u0442. \u0421\u043f\u0440\u043e\u0431\u0443\u0439\u0442\u0435: _\u041c\u0435\u043b\u044c\u043d\u0438\u043a \u0406\u0432\u0430\u043d \u0406\u0432\u0430\u043d\u043e\u0432\u0438\u0447_ \u0430\u0431\u043e _\u041c\u0435\u043b\u044c\u043d\u0438\u043a \u0406\u0432\u0430\u043d_ ";
-    //"За фільтром %s в базі знайденно: %d записів."
-    private static final String MESSAGE_FOUND_COUNT = "\u0417\u0430 \u0444\u0456\u043b\u044c\u0442\u0440\u043e\u043c %s \u0432 \u0431\u0430\u0437\u0456 \u0437\u043d\u0430\u0439\u0434\u0435\u043d\u043d\u043e: %d \u0437\u0430\u043f\u0438\u0441\u0456\u0432.";
-    //"\n _Список прізвищ що співпали з фільтром:_"
-    private static final String MESSAGE_LIST = "\n _\u0421\u043f\u0438\u0441\u043e\u043a \u043f\u0440\u0456\u0437\u0432\u0438\u0449 \u0449\u043e \u0441\u043f\u0456\u0432\u043f\u0430\u043b\u0438 \u0437 \u0444\u0456\u043b\u044c\u0442\u0440\u043e\u043c:_";
+    //"За фільтром \"%s\" в базі знайденно: %d записів."
+    private static final String MESSAGE_FOUND_COUNT = "\u0417\u0430 \u0444\u0456\u043b\u044c\u0442\u0440\u043e\u043c \"%s\" \u0432 \u0431\u0430\u0437\u0456 \u0437\u043d\u0430\u0439\u0434\u0435\u043d\u043d\u043e: %d \u0437\u0430\u043f\u0438\u0441\u0456\u0432.";
+    //"\n _В системі присутні такі 'по батькові':_ \n"
+    private static final String MESSAGE_LIST = "\n _\u0412 \u0441\u0438\u0441\u0442\u0435\u043c\u0456 \u043f\u0440\u0438\u0441\u0443\u0442\u043d\u0456 \u0442\u0430\u043a\u0456 '\u043f\u043e \u0431\u0430\u0442\u044c\u043a\u043e\u0432\u0456':_ \n";
 
 
     private TelegramBot telegramBot;
@@ -37,8 +37,8 @@ public class FopRequestProcessor implements UpdateProcessor {
     private void sendMessage(Long chatId, String message) {
         SendMessage request = new SendMessage(chatId, message);
         request.parseMode(ParseMode.Markdown);
-        SendResponse telegtamResponse = telegramBot.execute(request);
-        LOG.trace(telegtamResponse);
+        SendResponse telegramResponse = telegramBot.execute(request);
+        LOG.trace(telegramResponse);
     }
 
     @Override
@@ -49,18 +49,16 @@ public class FopRequestProcessor implements UpdateProcessor {
         String[] words = getWordsFromText(userQuery);
         if(!valid(words)){
             sendMessage(chatId, MESSAGE_QUERY_EXAMPLE);
-            return false;
-        }
-        if (words.length == 2){
-            return getFopNames(chatId, userQuery, words);
+        } else if (words.length == 2){
+            getFopNames(chatId, userQuery, words);
         } else if (words.length == 3){
-            return sendFopsAllInfoList(chatId, words);
+            sendFopsAllInfoList(chatId, words);
         }
         return true;
     }
 
     private boolean getFopNames(Long chatId, String userQuery, String[] words) {
-        List<FopNorm> fops = null;
+        List<FopNorm> fops;
         try {
             String[] s = convertToFullTextSearch(words);
             fops = this.fopDao.getFops(s[0], s[1]);
@@ -68,16 +66,20 @@ public class FopRequestProcessor implements UpdateProcessor {
             LOG.warn(e.getMessage());
             return true;
         }
-        //todo make fop limit, grouping, count ...
         if (fops.size() == 0) {
             sendMessage(chatId, String.format(MESSAGE_NO_DATA, userQuery));
         } else {
             StringBuilder sb = new StringBuilder();
             sb.append(String.format(MESSAGE_FOUND_COUNT, userQuery, fops.size()));
             sb.append(MESSAGE_LIST);
+
             fops.stream()
-                    .forEach(fop -> sb.append(fop.getOther_name())
-                    .append("\n"));
+                    .map(fop -> fop.getOther_name())
+                    .distinct()
+                    .sorted()
+                    .forEach(
+                            otherName -> sb.append(otherName).append("\n")
+                    );
             sendMessage(chatId, sb.toString());
             return true;
         }
@@ -85,7 +87,7 @@ public class FopRequestProcessor implements UpdateProcessor {
     }
 
     private boolean sendFopsAllInfoList(Long chatId, String[] words) {
-        List<FopNorm> fops = null;
+        List<FopNorm> fops;
         try {
             String[] s = convertToFullTextSearch(words);
             fops = this.fopDao.getFops(s[0], s[1], s[2]);

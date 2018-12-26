@@ -9,7 +9,7 @@ import org.eclipse.jetty.server.handler.ContextHandler;
 
 public class JettyWebServerStarter {
     private static final Logger LOG = LogManager.getLogger(JettyWebServerStarter.class);
-    public static final String WEB_HOOK_PATH = "/webHook";
+    public static final String WEB_HOOK_PATH = "/botUpdatesWebHook/";
     public static final int DEFAULT_PORT = 8080;
 
     public static int getWebServerPort(String portStr) {
