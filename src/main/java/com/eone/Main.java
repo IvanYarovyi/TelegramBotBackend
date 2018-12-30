@@ -3,6 +3,7 @@ package com.eone;
 import com.eone.bot.TelegramUtils;
 import com.eone.bot.db.FopNormDao;
 import com.eone.bot.updates.FopRequestProcessor;
+import com.eone.bot.updates.MessageSender;
 import com.eone.bot.web.JettyWebServerStarter;
 import com.eone.bot.args.AppCommandLineOptions;
 import com.eone.bot.args.OPTION;
@@ -33,7 +34,7 @@ public class Main {
 
         int port = JettyWebServerStarter.getWebServerPort(portStr);
         FopNormDao fopDao = new FopNormDao(dbUrl, dbUser, dbPassword);
-        JettyWebServerStarter.start(port, telegramBot, new FopRequestProcessor(telegramBot, fopDao));
+        JettyWebServerStarter.start(port, telegramBot, new FopRequestProcessor(new MessageSender(telegramBot), fopDao));
         //this line executes never
     }
 
