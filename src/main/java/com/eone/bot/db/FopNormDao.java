@@ -38,7 +38,10 @@ public class FopNormDao {
         psGetCount.setString(2, first);
         psGetCount.setString(3, other);
         ResultSet resultSet = psGetCount.executeQuery();
-        return resultSet.getLong(1);
+        while (resultSet.next()) {
+            return resultSet.getLong(1);
+        }
+        return null;
     }
 
     public List<FopNorm> getFops(String last, String first, String other) throws SQLException {
