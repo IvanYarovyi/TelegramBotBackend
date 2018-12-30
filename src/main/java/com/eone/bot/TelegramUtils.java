@@ -32,7 +32,7 @@ public class TelegramUtils {
         }
 
         GetWebhookInfoResponse webHookInfoResponse = telegramBot.execute(new GetWebhookInfo());
-        LOG.info("\n\n Check Telegram status. {} \n\n", webHookInfoResponse);
+        LOG.info("\n\n\n Check Telegram status. {} \n\n", webHookInfoResponse);
     }
 
 }

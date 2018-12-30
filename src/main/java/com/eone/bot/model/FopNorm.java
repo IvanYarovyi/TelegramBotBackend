@@ -8,6 +8,9 @@ public class FopNorm {
     private String activity;
     private String status;
 
+    public FopNorm() {
+    }
+
     public FopNorm(String last_name, String first_name, String other_name, String address, String activity, String status) {
         this.last_name = last_name;
         this.first_name = first_name;
@@ -27,6 +30,10 @@ public class FopNorm {
 
     public String getOther_name() {
         return other_name;
+    }
+
+    public void setOther_name(String other_name) {
+        this.other_name = other_name;
     }
 
     public String getAddress() {
