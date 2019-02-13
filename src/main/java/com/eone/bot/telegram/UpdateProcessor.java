@@ -1,4 +1,4 @@
-package com.eone.bot.updates;
+package com.eone.bot.telegram;
 
 import com.pengrad.telegrambot.model.Update;
 

@@ -1,14 +1,17 @@
-package com.eone.bot.updates;
+package com.eone.bot.telegram;
 
 import com.eone.bot.db.FopNormDao;
-import com.eone.bot.model.FopNorm;
+import com.eone.bot.db.model.FopNorm;
+import com.eone.bot.telegram.updates.input.ChatInputParser;
+import com.eone.bot.telegram.updates.response.FopToMessageConverter;
+import com.eone.bot.telegram.updates.response.MessageSender;
 import com.pengrad.telegrambot.model.Update;
 import org.apache.logging.log4j.LogManager;
 
 import java.sql.SQLException;
 import java.util.List;
 
-import static com.eone.bot.updates.Messages.*;
+import static com.eone.bot.telegram.updates.response.Messages.*;
 
 public class FopRequestProcessor implements UpdateProcessor {
 
@@ -61,7 +64,7 @@ public class FopRequestProcessor implements UpdateProcessor {
     }
 
     private boolean isOkFirstWordLength(String word) {
-        return word.length() > 3;
+        return word.length() > 2;
     }
 
 

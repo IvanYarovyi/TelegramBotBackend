@@ -1,6 +1,6 @@
-package com.eone.bot.web;
+package com.eone.bot.webapp;
 
-import com.eone.bot.updates.UpdateProcessor;
+import com.eone.bot.telegram.UpdateProcessor;
 import com.pengrad.telegrambot.TelegramBot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

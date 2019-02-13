@@ -1,4 +1,4 @@
-package com.eone.bot;
+package com.eone.bot.webapp;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.GetWebhookInfo;
@@ -10,11 +10,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-import static com.eone.bot.web.JettyWebServerStarter.WEB_HOOK_PATH;
+import static com.eone.bot.webapp.JettyWebServerStarter.WEB_HOOK_PATH;
 
-public class TelegramUtils {
+public class TelegramWebhookUtils {
 
-    private static final Logger LOG = LogManager.getLogger(TelegramUtils.class);
+    private static final Logger LOG = LogManager.getLogger(TelegramWebhookUtils.class);
 
     public static void setupWebHook(String publicIp, String certPath, TelegramBot telegramBot) {
         if (publicIp != null && certPath != null) {

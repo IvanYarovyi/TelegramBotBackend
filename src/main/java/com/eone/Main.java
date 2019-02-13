@@ -1,10 +1,11 @@
 package com.eone;
 
-import com.eone.bot.TelegramUtils;
+import com.eone.bot.db.DataSource;
+import com.eone.bot.webapp.TelegramWebhookUtils;
 import com.eone.bot.db.FopNormDao;
-import com.eone.bot.updates.FopRequestProcessor;
-import com.eone.bot.updates.MessageSender;
-import com.eone.bot.web.JettyWebServerStarter;
+import com.eone.bot.telegram.FopRequestProcessor;
+import com.eone.bot.telegram.updates.response.MessageSender;
+import com.eone.bot.webapp.JettyWebServerStarter;
 import com.eone.bot.args.AppCommandLineOptions;
 import com.eone.bot.args.OPTION;
 import com.pengrad.telegrambot.TelegramBot;
@@ -30,12 +31,12 @@ public class Main {
 
 
         TelegramBot telegramBot = new TelegramBot(token);
-        TelegramUtils.setupWebHook(publicIp, certPath, telegramBot);
+        TelegramWebhookUtils.setupWebHook(publicIp, certPath, telegramBot);
 
         int port = JettyWebServerStarter.getWebServerPort(portStr);
-        FopNormDao fopDao = new FopNormDao(dbUrl, dbUser, dbPassword);
+        FopNormDao fopDao = new FopNormDao(new DataSource(dbUrl, dbUser, dbPassword));
         JettyWebServerStarter.start(port, telegramBot, new FopRequestProcessor(new MessageSender(telegramBot), fopDao));
-        //this line executes never
+        //this line never executes
     }
 
 }

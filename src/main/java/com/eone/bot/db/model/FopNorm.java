@@ -1,4 +1,4 @@
-package com.eone.bot.model;
+package com.eone.bot.db.model;
 
 public class FopNorm {
     private String last_name;
