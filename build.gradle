@@ -11,8 +11,7 @@ repositories {
 }
 
 //create a single Jar with all dependencies
-task fatJar(type: Jar) {
-    dependsOn("build")
+task fatJar(type: Jar, dependsOn: build) {
     manifest {
         attributes 'Implementation-Title': '',
                 'Implementation-Version': version,
@@ -22,6 +21,20 @@ task fatJar(type: Jar) {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
+
+task printChecksum {
+    doLast {
+        ant {
+            checksum(property: 'checksumOut') {
+                fileset(dir: '.') {
+                    include name: 'build.gradle' 
+                }
+            }
+        }
+        logger.lifecycle("The checksum is $ant.checksumOut")
+    }
+}
+
 
 dependencies {
     // https://mvnrepository.com/artifact/commons-cli/commons-cli
