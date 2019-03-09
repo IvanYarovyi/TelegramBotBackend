@@ -1,4 +1,4 @@
-package com.eone.bot.updates;
+package com.eone.bot.telegram;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
@@ -10,8 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
-//This get updates method is working since we are using web hook approach
-@Deprecated
+//This get updates method is working since we are using webapp hook approach
 public class UpdatesPuller {
     private static final Logger LOG = LogManager.getLogger(UpdatesListener.class);
 

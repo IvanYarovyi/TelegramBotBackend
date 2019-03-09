@@ -11,7 +11,7 @@ repositories {
 }
 
 //create a single Jar with all dependencies
-task fatJar(type: Jar) {
+task fatJar(type: Jar, dependsOn: build) {
     manifest {
         attributes 'Implementation-Title': '',
                 'Implementation-Version': version,
@@ -22,9 +22,26 @@ task fatJar(type: Jar) {
     with jar
 }
 
+task printChecksum {
+    doLast {
+        ant {
+            checksum(property: 'checksumOut') {
+                fileset(dir: '.') {
+                    include name: 'build.gradle' 
+                }
+            }
+        }
+        logger.lifecycle("The checksum is $ant.checksumOut")
+    }
+}
+
+
 dependencies {
     // https://mvnrepository.com/artifact/commons-cli/commons-cli
     compile group: 'commons-cli', name: 'commons-cli', version: '1.3.1'
+
+    // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
+    compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '1.2.0'
 
     compile 'com.github.pengrad:java-telegram-bot-api:4.1.0'
     compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.12.v20180830'
@@ -32,8 +49,11 @@ dependencies {
     compile 'org.apache.logging.log4j:log4j-api:2.10.0'
     compile 'org.apache.logging.log4j:log4j-core:2.10.0'
 
+    compile 'com.zaxxer:HikariCP:2.6.1'
+
     testCompile group: 'org.hamcrest', name: 'hamcrest-core', version: '1.3'
-    testCompile group: 'junit', name: 'junit-dep', version: '4.10'
+    
+    testCompile group: 'junit', name: 'junit', version: '4.10'
     testCompile group: 'org.hamcrest', name: 'hamcrest-library', version: '1.3'
     testCompile group: 'org.mockito', name: 'mockito-core', version: '1.9.+'
 }

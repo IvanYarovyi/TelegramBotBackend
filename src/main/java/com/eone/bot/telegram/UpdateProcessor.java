@@ -1,9 +1,9 @@
-package com.eone.bot.updates;
+package com.eone.bot.telegram;
 
 import com.pengrad.telegrambot.model.Update;
 
 public interface UpdateProcessor {
 
-    boolean processUpdate(Update update);
+    void processUpdate(Update update);
 
 }

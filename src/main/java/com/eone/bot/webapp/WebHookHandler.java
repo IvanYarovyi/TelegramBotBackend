@@ -1,6 +1,6 @@
-package com.eone.bot.web;
+package com.eone.bot.webapp;
 
-import com.eone.bot.updates.UpdateProcessor;
+import com.eone.bot.telegram.UpdateProcessor;
 import com.pengrad.telegrambot.BotUtils;
 import com.pengrad.telegrambot.model.Update;
 import org.apache.logging.log4j.LogManager;
@@ -30,18 +30,17 @@ public class WebHookHandler extends AbstractHandler {
                 .lines()
                 .collect(Collectors.joining(System.lineSeparator()));
         LOG.debug("Request BODY: \n" + body);
+        response.setContentType("text/html;charset=utf-8");
+        response.setStatus(HttpServletResponse.SC_OK);
+        baseRequest.setHandled(true);
+        response.getWriter().println("<h1>Request processed</h1>");
+        //todo add async?
         try {
             Update update = BotUtils.parseUpdate(body);
             updateProcessor.processUpdate(update);
         } catch (Exception e) {
             LOG.warn(e.getMessage());
-            return;
         }
-
-        response.setContentType("text/html;charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
-        baseRequest.setHandled(true);
-        response.getWriter().println("<h1>Request processed</h1>");
     }
 
 }

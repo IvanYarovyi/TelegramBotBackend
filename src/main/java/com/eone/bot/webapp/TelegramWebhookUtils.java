@@ -1,4 +1,4 @@
-package com.eone.bot;
+package com.eone.bot.webapp;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.GetWebhookInfo;
@@ -10,20 +10,20 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-import static com.eone.bot.web.JettyWebServerStarter.WEB_HOOK_PATH;
+import static com.eone.bot.webapp.JettyWebServerStarter.WEB_HOOK_PATH;
 
-public class TelegramUtils {
+public class TelegramWebhookUtils {
 
-    private static final Logger LOG = LogManager.getLogger(TelegramUtils.class);
+    private static final Logger LOG = LogManager.getLogger(TelegramWebhookUtils.class);
 
-    public static void setupWebHook(String webHook, String certPath, TelegramBot telegramBot) {
-        if (webHook != null && certPath != null) {
+    public static void setupWebHook(String publicIp, String certPath, TelegramBot telegramBot) {
+        if (publicIp != null && certPath != null) {
             File certificateFile = new File(certPath);
             if (!certificateFile.canRead()) {
                 LOG.warn("Can't read certificate :" + certPath);
             }
             SetWebhook request = new SetWebhook()
-                    .url(webHook + WEB_HOOK_PATH)
+                    .url(publicIp + WEB_HOOK_PATH)
                     .certificate(certificateFile);
             BaseResponse setWebHookResponse = telegramBot.execute(request);
             LOG.info("Set WebHook Response :" + setWebHookResponse);
@@ -32,7 +32,7 @@ public class TelegramUtils {
         }
 
         GetWebhookInfoResponse webHookInfoResponse = telegramBot.execute(new GetWebhookInfo());
-        LOG.info("Check Telegram status. {}", webHookInfoResponse);
+        LOG.info("\n\n\n Check Telegram status. {} \n\n", webHookInfoResponse);
     }
 
 }
